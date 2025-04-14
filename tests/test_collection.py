@@ -151,3 +151,4 @@ def test_id_retention_and_types(collection, id):
     doc = collection.find_one({"_id": id})
 
     assert doc == {"a":1, "_id": id}
+    assert type(id) == type(doc['_id'])

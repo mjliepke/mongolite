@@ -382,9 +382,8 @@ class ChunkedEngine(BaseEngine):
 
             if not documents:
                 break
-
+            
             for document in documents:
-                document.data["_id"] = ObjectId(document.data["_id"])
                 yield document
 
     def _pre_extraction_filtering(
