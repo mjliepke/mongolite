@@ -286,9 +286,12 @@ class ChunkedEngine(BaseEngine):
         inserted_object_ids = []
 
         for document in documents:
-            oid = ObjectId()
-            document["_id"] = str(oid)
-            inserted_object_ids.append(oid)
+            if "_id" in document.keys():
+                inserted_object_ids.append(document["_id"])
+            else:
+                oid = ObjectId()
+                document["_id"] = str(oid)
+                inserted_object_ids.append(oid)
 
         documents_lookup_keys = self._storage_engine.insert_documents(
             database_name=database_name,

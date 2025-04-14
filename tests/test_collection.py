@@ -4,7 +4,7 @@ import shutil
 import pytest
 
 from pymongolite import MongoClient
-
+from pymongolite.backend.objectid import ObjectId
 type_test_list = ["a string", 1, 1.002, True, datetime.datetime.now(), ["1", "2", "3", 2, True], {"1": 2, "2": 2.3, "3": datetime.datetime.now(), "4": True}, None]
 
 @pytest.fixture(scope="function")
@@ -143,3 +143,11 @@ def test_replace_many(collection):
     collection.replace_many({}, {"b": 1})
 
     assert list(collection.find({}, {"_id": 0})) == [{"b": 1}, {"b": 1}]
+
+@pytest.mark.parametrize("id", [ObjectId("5b486d4057d0e42a3ca9c106"), "5b486d4057d0e42a3ca9c106"])
+def test_id_retention_and_types(collection, id):
+    collection.insert_one({"a": 1, "_id": id})
+
+    doc = collection.find_one({"_id": id})
+
+    assert doc == {"a":1, "_id": id}
